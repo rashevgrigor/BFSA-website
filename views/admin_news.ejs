@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>News Management | БФСА</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-[#fbf8f1] text-[#26201c]">
+  <header class="border-b bg-white/90 px-4 py-4 shadow-sm sm:px-6">
+    <div class="mx-auto flex max-w-6xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <h1 class="text-xl font-black text-[#063d2d] sm:text-2xl">News Management</h1>
+        <p class="text-sm text-gray-600">Logged in as <b><%= currentAdmin.name %></b></p>
+      </div>
+      <div class="flex flex-wrap items-center justify-center gap-2 sm:justify-end sm:gap-3">
+        <a href="/admin" class="rounded-xl border px-4 py-2 font-bold text-[#063d2d]">Admin Dashboard</a>
+        <a href="/admin/news/new" class="rounded-xl bg-[#0f6043] px-4 py-2 font-bold text-white">Create News</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
+    <div class="overflow-x-auto rounded-3xl bg-white shadow-xl">
+      <table class="min-w-[760px] w-full text-left text-sm">
+        <thead class="bg-[#063d2d] text-white">
+          <tr>
+            <th class="p-4">Image</th>
+            <th class="p-4">Title</th>
+            <th class="p-4">Category</th>
+            <th class="p-4">Featured</th>
+            <th class="p-4">Created</th>
+            <th class="p-4">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (!news.length) { %>
+            <tr><td colspan="6" class="p-6 text-center text-gray-500">No news yet.</td></tr>
+          <% } %>
+          <% news.forEach(article => { %>
+            <tr class="border-t align-middle">
+              <td class="p-4">
+                <% if (article.image_path) { %>
+                  <img src="<%= article.image_path %>" class="h-16 w-24 rounded-lg object-cover">
+                <% } else { %>
+                  <div class="grid h-16 w-24 place-items-center rounded-lg bg-[#ead8b5] text-[#063d2d] font-bold">БФСА</div>
+                <% } %>
+              </td>
+              <td class="p-4">
+                <div class="font-black text-[#063d2d]"><%= article.title %></div>
+                <a href="/news/<%= article.slug %>" target="_blank" class="text-xs text-[#0f6043] hover:underline">View public page</a>
+              </td>
+              <td class="p-4"><%= article.category %></td>
+              <td class="p-4"><%= article.featured ? 'Yes' : 'No' %></td>
+              <td class="p-4"><%= new Date(article.created_at).toLocaleDateString('bg-BG') %></td>
+              <td class="p-4">
+                <div class="flex gap-2">
+                  <a href="/admin/news/<%= article.id %>/edit" class="rounded-lg border px-3 py-2 font-bold">Edit</a>
+                  <form action="/admin/news/<%= article.id %>/delete" method="POST" onsubmit="return confirm('Delete this news article?')">
+                    <button class="rounded-lg border border-red-300 px-3 py-2 font-bold text-red-700">Delete</button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</body>
+</html>

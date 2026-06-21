@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Състезания | БФСА</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-[#fbf8f1] text-[#26201c]">
+  <header class="bg-[#063d2d] px-6 py-12 text-white">
+    <div class="mx-auto max-w-6xl">
+      <a href="/" class="inline-flex items-center rounded-xl border border-[#bd8e3b]/40 px-4 py-2 text-sm font-black text-[#ead8b5] transition hover:bg-white/10">
+        <span class="sm:hidden">← Начало</span>
+        <span class="hidden sm:inline">← Обратно към началната страница</span>
+      </a>
+      <h1 class="mt-5 text-4xl font-black uppercase md:text-4xl sm:text-5xl">Състезания</h1>
+      <p class="mt-2 max-w-2xl text-white/75">Предстоящи събития, важна информация, бюлетини и официални връзки.</p>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-6xl px-6 py-10">
+    <section>
+      <div class="mb-6 flex items-center justify-between">
+        <h2 class="text-xl font-black text-[#063d2d] sm:text-2xl">🏆 Upcoming</h2>
+      </div>
+      <div class="grid gap-4 sm:gap-4 sm:p-6 md:grid-cols-2 lg:grid-cols-3">
+        <% if (!upcoming.length) { %><p class="text-gray-500">Няма предстоящи състезания.</p><% } %>
+        <% upcoming.forEach(c => { %>
+          <a href="/competitions/<%= c.slug %>" class="group overflow-hidden rounded-3xl bg-white shadow-xl transition hover:-translate-y-1 hover:shadow-2xl">
+            <% if (c.poster_path) { %>
+              <img src="<%= c.poster_path %>" class="h-48 w-full object-cover">
+            <% } else { %>
+              <div class="grid h-48 place-items-center bg-[#ead8b5] text-4xl font-black text-[#063d2d]">БФСА</div>
+            <% } %>
+            <div class="p-4 sm:p-6">
+              <div class="text-xs font-black uppercase tracking-[.14em] text-[#bd8e3b]"><%= c.category %></div>
+              <h3 class="mt-2 text-xl font-black uppercase text-[#063d2d]"><%= c.title %></h3>
+              <p class="mt-2 text-sm text-gray-600">📍 <%= [c.city, c.country].filter(Boolean).join(', ') || 'TBA' %></p>
+              <p class="mt-1 text-sm text-gray-600">📅 <%= c.start_date %><% if (c.end_date && c.end_date !== c.start_date) { %> – <%= c.end_date %><% } %></p>
+              <span class="mt-5 inline-block rounded-xl bg-[#0f6043] px-4 py-3 text-sm font-black text-white">View Event</span>
+            </div>
+          </a>
+        <% }) %>
+      </div>
+    </section>
+
+    <section class="mt-14">
+      <h2 class="mb-6 text-2xl font-black text-[#063d2d]">📚 Past / Archive</h2>
+      <div class="overflow-hidden rounded-3xl bg-white shadow-xl">
+        <table class="min-w-[680px] w-full text-left text-sm">
+          <thead class="bg-[#063d2d] text-white"><tr><th class="p-4">Competition</th><th class="p-4">Date</th><th class="p-4">Location</th><th class="p-4">Info</th></tr></thead>
+          <tbody>
+            <% if (!past.length) { %><tr><td colspan="4" class="p-4 sm:p-6 text-center text-gray-500">Archive is empty.</td></tr><% } %>
+            <% past.forEach(c => { %>
+              <tr class="border-t">
+                <td class="p-4 font-black text-[#063d2d]"><%= c.title %></td>
+                <td class="p-4"><%= c.start_date %></td>
+                <td class="p-4"><%= [c.city, c.country].filter(Boolean).join(', ') || '—' %></td>
+                <td class="p-4"><a href="/competitions/<%= c.slug %>" class="font-bold text-[#0f6043] hover:underline">Open</a></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

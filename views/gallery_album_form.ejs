@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= album ? 'Edit Album' : 'Create Album' %> | БФСА</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-[#fbf8f1] text-[#26201c]">
+  <header class="border-b bg-white/90 px-4 py-4 shadow-sm sm:px-6">
+    <div class="mx-auto flex max-w-4xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <h1 class="text-xl font-black text-[#063d2d] sm:text-2xl"><%= album ? 'Edit Album' : 'Create Album' %></h1>
+      <a href="/admin/gallery" class="rounded-xl border px-4 py-2 font-bold text-[#063d2d]">Back</a>
+    </div>
+  </header>
+  <main class="mx-auto max-w-4xl px-4 py-6 sm:px-6 sm:py-8">
+    <form action="<%= album ? '/admin/gallery/' + album.id + '/edit' : '/admin/gallery' %>" method="POST" enctype="multipart/form-data" class="rounded-3xl bg-white p-4 shadow-xl space-y-5 sm:p-6">
+      <% if (error) { %><div class="rounded-xl bg-red-50 p-3 text-sm text-red-700"><%= error %></div><% } %>
+      <label class="block text-sm font-bold">Album title
+        <input name="title" value="<%= album ? album.title : '' %>" required class="mt-1 w-full rounded-xl border p-3">
+      </label>
+      <label class="block text-sm font-bold">Description
+        <textarea name="description" rows="6" class="mt-1 w-full rounded-xl border p-3"><%= album ? album.description : '' %></textarea>
+      </label>
+      <% if (album && album.cover_image) { %>
+        <div>
+          <p class="mb-2 text-sm font-bold">Current cover</p>
+          <img src="<%= album.cover_image %>" class="h-48 rounded-2xl object-cover ring-1 ring-[#ead8b5]">
+        </div>
+      <% } %>
+      <label class="block text-sm font-bold">Cover image
+        <input name="cover" type="file" accept="image/*" class="mt-1 w-full rounded-xl border p-3">
+      </label>
+      <button class="rounded-xl bg-[#0f6043] px-5 py-3 font-bold text-white"><%= album ? 'Save Changes' : 'Create Album' %></button>
+    </form>
+  </main>
+</body>
+</html>

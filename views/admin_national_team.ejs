@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>National Team Management | БФСА</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-[#fbf8f1] text-[#26201c]">
+  <header class="border-b bg-white/90 px-4 py-4 shadow-sm sm:px-6">
+    <div class="mx-auto flex max-w-6xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <h1 class="text-xl font-black text-[#063d2d] sm:text-2xl">National Team Management</h1>
+        <p class="text-sm text-gray-600">Logged in as <b><%= currentAdmin.name %></b></p>
+      </div>
+      <div class="flex flex-wrap items-center justify-center gap-2 sm:justify-end sm:gap-3">
+        <a href="/admin" class="rounded-xl border px-4 py-2 font-bold text-[#063d2d]">Admin Dashboard</a>
+        <a href="/admin/national-team/new" class="rounded-xl bg-[#0f6043] px-4 py-2 font-bold text-white">Add Entry</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
+    <div class="overflow-hidden rounded-3xl bg-white shadow-xl ring-1 ring-[#ead8b5]">
+      <table class="min-w-[680px] w-full text-left text-sm">
+        <thead class="bg-[#063d2d] text-white">
+          <tr>
+            <th class="p-4">Entry</th>
+            <th class="p-4">Age Group</th>
+            <th class="p-4">Category</th>
+            <th class="p-4">Athletes</th>
+            <th class="p-4">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (!entries.length) { %>
+            <tr><td colspan="5" class="p-8 text-center text-gray-500">No national team entries yet.</td></tr>
+          <% } %>
+          <% entries.forEach(entry => { %>
+            <tr class="border-t align-top">
+              <td class="p-4">
+                <div class="flex flex-wrap items-center justify-center gap-2 sm:justify-end sm:gap-3">
+                  <% if (entry.photo_path) { %>
+                    <img src="<%= entry.photo_path %>" class="h-14 w-20 rounded-xl object-cover">
+                  <% } else { %>
+                    <div class="grid h-14 w-20 place-items-center rounded-xl bg-[#ead8b5] font-black text-[#063d2d]">БФСА</div>
+                  <% } %>
+                  <div>
+                    <div class="font-black text-[#063d2d]"><%= entry.title %></div>
+                    <div class="text-xs text-gray-500"><%= entry.club || '—' %></div>
+                  </div>
+                </div>
+              </td>
+              <td class="p-4"><%= ageGroupLabel(entry.age_group) %></td>
+              <td class="p-4"><%= ntCategoryLabel(entry.category) %></td>
+              <td class="p-4"><%= [entry.athlete1, entry.athlete2, entry.athlete3, entry.athlete4].filter(Boolean).join(' · ') %></td>
+              <td class="p-4">
+                <div class="flex flex-wrap gap-2">
+                  <a href="/national-team/<%= entry.slug %>" target="_blank" class="rounded-lg border px-3 py-2 text-xs font-bold">View</a>
+                  <a href="/admin/national-team/<%= entry.id %>/edit" class="rounded-lg bg-[#0f6043] px-3 py-2 text-xs font-bold text-white">Edit</a>
+                  <form action="/admin/national-team/<%= entry.id %>/delete" method="POST" onsubmit="return confirm('Delete this national team entry?')">
+                    <button class="rounded-lg border border-red-300 px-3 py-2 text-xs font-bold text-red-700">Delete</button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</body>
+</html>

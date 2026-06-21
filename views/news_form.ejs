@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= article ? 'Edit News' : 'Create News' %> | БФСА</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-[#fbf8f1] text-[#26201c]">
+  <main class="mx-auto max-w-3xl px-4 py-6 sm:px-6 sm:py-8">
+    <div class="rounded-3xl bg-white p-5 shadow-2xl sm:p-8">
+      <div class="mb-6 flex items-center justify-between">
+        <h1 class="text-2xl font-black text-[#063d2d] sm:text-3xl"><%= article ? 'Edit News' : 'Create News' %></h1>
+        <a href="/admin/news" class="text-sm font-bold text-[#0f6043] hover:underline">Back to News</a>
+      </div>
+
+      <% if (error) { %>
+        <div class="mb-5 rounded-xl bg-red-50 p-3 text-sm text-red-700"><%= error %></div>
+      <% } %>
+
+      <form action="<%= article ? '/admin/news/' + article.id + '/edit' : '/admin/news' %>" method="POST" enctype="multipart/form-data" class="space-y-5">
+        <label class="block text-sm font-bold">Title
+          <input name="title" required value="<%= article ? article.title : '' %>" class="mt-1 w-full rounded-xl border p-3 focus:ring-2 focus:ring-[#bd8e3b]">
+        </label>
+
+        <label class="block text-sm font-bold">Category
+          <input name="category" value="<%= article ? article.category : 'Новини' %>" class="mt-1 w-full rounded-xl border p-3 focus:ring-2 focus:ring-[#bd8e3b]">
+        </label>
+
+        <label class="block text-sm font-bold">Short Description
+          <textarea name="summary" required rows="3" class="mt-1 w-full rounded-xl border p-3 focus:ring-2 focus:ring-[#bd8e3b]"><%= article ? article.summary : '' %></textarea>
+        </label>
+
+        <label class="block text-sm font-bold">Full Article
+          <textarea name="content" required rows="10" class="mt-1 w-full rounded-xl border p-3 focus:ring-2 focus:ring-[#bd8e3b]"><%= article ? article.content : '' %></textarea>
+        </label>
+
+        <div>
+          <label class="block text-sm font-bold">Cover Image</label>
+          <% if (article && article.image_path) { %>
+            <img src="<%= article.image_path %>" class="my-3 h-40 w-full rounded-xl object-cover">
+            <p class="mb-2 text-xs text-gray-500">Upload a new image only if you want to replace the current one.</p>
+          <% } %>
+          <input name="image" type="file" accept="image/*" class="w-full rounded-xl border bg-white p-3">
+        </div>
+
+        <label class="flex items-center gap-3 rounded-xl bg-[#fbf8f1] p-4 font-bold">
+          <input name="featured" type="checkbox" <%= article && article.featured ? 'checked' : '' %> class="h-5 w-5">
+          Featured news
+        </label>
+
+        <button class="w-full rounded-xl bg-[#0f6043] px-4 py-3 font-bold text-white hover:bg-[#063d2d]">
+          <%= article ? 'Save Changes' : 'Publish News' %>
+        </button>
+      </form>
+    </div>
+  </main>
+</body>
+</html>

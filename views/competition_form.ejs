@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= competition ? 'Edit Competition' : 'Add Competition' %> | БФСА</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-[#fbf8f1] text-[#26201c]">
+  <header class="border-b bg-white/90 px-4 py-4 shadow-sm sm:px-6">
+    <div class="mx-auto flex max-w-5xl items-center justify-between gap-4">
+      <div>
+        <h1 class="text-xl font-black text-[#063d2d] sm:text-2xl"><%= competition ? 'Edit Competition' : 'Add Competition' %></h1>
+        <p class="text-sm text-gray-600">Competition information hub — not results/gallery archive.</p>
+      </div>
+      <a href="/admin/competitions" class="rounded-xl border px-4 py-2 font-bold text-[#063d2d]">Back</a>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-5xl px-6 py-8">
+    <% if (error) { %><div class="mb-6 rounded-xl bg-red-50 p-4 text-red-700"><%= error %></div><% } %>
+    <form action="<%= competition ? '/admin/competitions/' + competition.id + '/edit' : '/admin/competitions' %>" method="POST" enctype="multipart/form-data" class="grid gap-6 lg:grid-cols-[1fr_360px]">
+      <section class="space-y-4 rounded-3xl bg-white p-6 shadow-xl">
+        <label class="block text-sm font-bold">Competition name
+          <input name="title" required value="<%= competition ? competition.title : '' %>" class="mt-1 w-full rounded-xl border p-3">
+        </label>
+        <div class="grid gap-4 md:grid-cols-2">
+          <label class="block text-sm font-bold">City
+            <input name="city" value="<%= competition ? competition.city : '' %>" class="mt-1 w-full rounded-xl border p-3">
+          </label>
+          <label class="block text-sm font-bold">Country
+            <input name="country" value="<%= competition ? competition.country : '' %>" class="mt-1 w-full rounded-xl border p-3">
+          </label>
+        </div>
+        <label class="block text-sm font-bold">Venue
+          <input name="venue" value="<%= competition ? competition.venue : '' %>" class="mt-1 w-full rounded-xl border p-3">
+        </label>
+        <div class="grid gap-4 md:grid-cols-2">
+          <label class="block text-sm font-bold">Start date
+            <input name="start_date" type="date" required value="<%= competition ? competition.start_date : '' %>" class="mt-1 w-full rounded-xl border p-3">
+          </label>
+          <label class="block text-sm font-bold">End date
+            <input name="end_date" type="date" value="<%= competition ? competition.end_date : '' %>" class="mt-1 w-full rounded-xl border p-3">
+          </label>
+        </div>
+        <div class="grid gap-4 md:grid-cols-2">
+          <label class="block text-sm font-bold">Category
+            <select name="category" class="mt-1 w-full rounded-xl border p-3">
+              <% const category = competition ? competition.category : ''; %>
+              <option <%= category === 'World Cup' ? 'selected' : '' %>>World Cup</option>
+              <option <%= category === 'European Championship' ? 'selected' : '' %>>European Championship</option>
+              <option <%= category === 'National Championship' ? 'selected' : '' %>>National Championship</option>
+              <option <%= category === 'International Tournament' ? 'selected' : '' %>>International Tournament</option>
+              <option <%= category === 'Training Camp' ? 'selected' : '' %>>Training Camp</option>
+            </select>
+          </label>
+          <label class="block text-sm font-bold">Status
+            <select name="status" class="mt-1 w-full rounded-xl border p-3">
+              <% const status = competition ? competition.status : 'upcoming'; %>
+              <option value="upcoming" <%= status === 'upcoming' ? 'selected' : '' %>>Upcoming / Featured</option>
+              <option value="finished" <%= status === 'finished' ? 'selected' : '' %>>Finished</option>
+              <option value="cancelled" <%= status === 'cancelled' ? 'selected' : '' %>>Cancelled</option>
+            </select>
+          </label>
+        </div>
+        <label class="block text-sm font-bold">Short description
+          <textarea name="short_description" rows="3" class="mt-1 w-full rounded-xl border p-3"><%= competition ? competition.short_description : '' %></textarea>
+        </label>
+        <label class="block text-sm font-bold">Full information
+          <textarea name="description" rows="8" class="mt-1 w-full rounded-xl border p-3"><%= competition ? competition.description : '' %></textarea>
+        </label>
+      </section>
+
+      <aside class="space-y-4 rounded-3xl bg-white p-6 shadow-xl">
+        <label class="block text-sm font-bold">Poster / banner image
+          <input name="poster" type="file" accept="image/*" class="mt-2 w-full rounded-xl border p-3">
+        </label>
+        <% if (competition && competition.poster_path) { %>
+          <img src="<%= competition.poster_path %>" class="rounded-2xl border object-cover">
+        <% } %>
+        <label class="block text-sm font-bold">Bulletin / information PDF
+          <input name="bulletin" type="file" accept="application/pdf" class="mt-2 w-full rounded-xl border p-3">
+        </label>
+        <% if (competition && competition.bulletin_path) { %>
+          <a href="<%= competition.bulletin_path %>" target="_blank" class="inline-block text-[#0f6043] hover:underline">Current PDF</a>
+        <% } %>
+        <label class="block text-sm font-bold">Official website URL
+          <input name="website_url" type="url" value="<%= competition ? competition.website_url : '' %>" class="mt-1 w-full rounded-xl border p-3">
+        </label>
+        <label class="block text-sm font-bold">Live stream URL
+          <input name="live_stream_url" type="url" value="<%= competition ? competition.live_stream_url : '' %>" class="mt-1 w-full rounded-xl border p-3">
+        </label>
+        <button class="w-full rounded-xl bg-[#0f6043] px-4 py-3 font-black text-white"><%= competition ? 'Save Changes' : 'Create Competition' %></button>
+      </aside>
+    </form>
+  </main>
+</body>
+</html>

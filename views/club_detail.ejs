@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= club.name %> | БФСА</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body class="min-h-screen bg-[#fbf8f1] text-[#26201c]">
+  <header class="bg-[#063d2d] px-6 py-10 text-white">
+    <div class="mx-auto flex max-w-5xl items-center gap-6">
+      <% if (club.logo_path) { %>
+        <img src="<%= club.logo_path %>" class="h-28 w-28 rounded-3xl object-cover ring-4 ring-[#ead8b5]/40">
+      <% } else { %>
+        <div class="grid h-28 w-28 place-items-center rounded-3xl bg-[#ead8b5] text-2xl font-black text-[#063d2d]">БФСА</div>
+      <% } %>
+      <div>
+        <a href="/clubs" class="text-sm font-bold text-[#ead8b5] hover:underline">← Клубове</a>
+        <h1 class="mt-3 text-4xl font-black"><%= club.name %></h1>
+        <p class="mt-2 text-white/75"><i class="fa-solid fa-location-dot"></i> <%= club.city %></p>
+      </div>
+    </div>
+  </header>
+
+  <main class="mx-auto grid max-w-5xl gap-8 px-6 py-10 lg:grid-cols-[1fr_320px]">
+    <section class="rounded-3xl bg-white p-8 shadow-xl">
+      <h2 class="text-xl font-black text-[#063d2d] sm:text-2xl">За клуба</h2>
+      <p class="mt-4 whitespace-pre-line text-gray-700"><%= club.description || club.short_description || 'Няма добавено описание.' %></p>
+    </section>
+
+    <aside class="rounded-3xl bg-white p-4 shadow-xl sm:p-6">
+      <h2 class="text-xl font-black text-[#063d2d]">Контакти</h2>
+      <div class="mt-4 space-y-3 text-sm">
+        <% if (club.coach) { %><p><b>Треньор:</b><br><%= club.coach %></p><% } %>
+        <% if (club.address) { %><p><b>Адрес:</b><br><%= club.address %></p><% } %>
+        <% if (club.phone) { %><p><b>Телефон:</b><br><%= club.phone %></p><% } %>
+        <% if (club.email) { %><p><b>Email:</b><br><a href="mailto:<%= club.email %>" class="text-[#0f6043] hover:underline"><%= club.email %></a></p><% } %>
+        <% if (club.website) { %><a href="<%= club.website %>" target="_blank" class="block rounded-xl bg-[#0f6043] px-4 py-3 text-center font-black text-white">Website</a><% } %>
+        <% if (club.instagram) { %><a href="<%= club.instagram %>" target="_blank" class="block rounded-xl border px-4 py-3 text-center font-black text-[#063d2d]">Instagram</a><% } %>
+        <% if (club.facebook) { %><a href="<%= club.facebook %>" target="_blank" class="block rounded-xl border px-4 py-3 text-center font-black text-[#063d2d]">Facebook</a><% } %>
+      </div>
+    </aside>
+  </main>
+</body>
+</html>

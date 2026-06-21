@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clubs Management | БФСА</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-[#fbf8f1] text-[#26201c]">
+  <header class="border-b bg-white/90 px-4 py-4 shadow-sm sm:px-6">
+    <div class="mx-auto flex max-w-6xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <h1 class="text-xl font-black text-[#063d2d] sm:text-2xl">Clubs Management</h1>
+        <p class="text-sm text-gray-600">Logged in as <b><%= currentAdmin.name %></b></p>
+      </div>
+      <div class="flex flex-wrap items-center justify-center gap-2 sm:justify-end sm:gap-3">
+        <a href="/admin" class="rounded-xl border px-4 py-2 font-bold text-[#063d2d]">Admin Dashboard</a>
+        <a href="/admin/clubs/new" class="rounded-xl bg-[#0f6043] px-4 py-2 font-bold text-white">Add Club</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
+    <div class="overflow-x-auto rounded-3xl bg-white shadow-xl">
+      <table class="min-w-[760px] w-full text-left text-sm">
+        <thead class="bg-[#063d2d] text-white">
+          <tr>
+            <th class="p-4">Logo</th>
+            <th class="p-4">Club</th>
+            <th class="p-4">City</th>
+            <th class="p-4">Coach</th>
+            <th class="p-4">Contact</th>
+            <th class="p-4">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (!clubs.length) { %>
+            <tr><td colspan="6" class="p-6 text-center text-gray-500">No clubs yet.</td></tr>
+          <% } %>
+          <% clubs.forEach(club => { %>
+            <tr class="border-t align-middle">
+              <td class="p-4">
+                <% if (club.logo_path) { %>
+                  <img src="<%= club.logo_path %>" class="h-16 w-16 rounded-xl object-cover ring-1 ring-[#ead8b5]">
+                <% } else { %>
+                  <div class="grid h-16 w-16 place-items-center rounded-xl bg-[#ead8b5] text-[#063d2d] font-black">БФСА</div>
+                <% } %>
+              </td>
+              <td class="p-4">
+                <div class="font-black text-[#063d2d]"><%= club.name %></div>
+                <a href="/clubs/<%= club.slug %>" target="_blank" class="text-xs text-[#0f6043] hover:underline">View public page</a>
+              </td>
+              <td class="p-4"><%= club.city %></td>
+              <td class="p-4"><%= club.coach || '—' %></td>
+              <td class="p-4">
+                <div><%= club.email || '—' %></div>
+                <div class="text-xs text-gray-500"><%= club.phone || '' %></div>
+              </td>
+              <td class="p-4">
+                <div class="flex gap-2">
+                  <a href="/admin/clubs/<%= club.id %>/edit" class="rounded-lg border px-3 py-2 font-bold">Edit</a>
+                  <form action="/admin/clubs/<%= club.id %>/delete" method="POST" onsubmit="return confirm('Delete this club?')">
+                    <button class="rounded-lg border border-red-300 px-3 py-2 font-bold text-red-700">Delete</button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</body>
+</html>

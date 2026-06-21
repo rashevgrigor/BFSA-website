@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documents | БФСА Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-[#fbf8f1] text-[#26201c]">
+  <header class="border-b bg-white/90 px-4 py-4 shadow-sm sm:px-6">
+    <div class="mx-auto flex max-w-6xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <h1 class="text-xl font-black text-[#063d2d] sm:text-2xl">Documents Center</h1>
+        <p class="text-sm text-gray-600">Upload calendars, regulations, bulletins, forms and official PDFs.</p>
+      </div>
+      <div class="flex flex-wrap items-center justify-center gap-2 sm:justify-end sm:gap-3">
+        <a href="/admin" class="rounded-xl border px-4 py-2 font-bold text-[#063d2d]">Dashboard</a>
+        <a href="/documents" class="rounded-xl border px-4 py-2 font-bold text-[#063d2d]">Public Page</a>
+        <a href="/admin/documents/new" class="rounded-xl bg-[#0f6043] px-4 py-2 font-bold text-white">+ Upload PDF</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
+    <% if (error) { %><div class="mb-5 rounded-xl bg-red-50 p-3 text-sm text-red-700"><%= error %></div><% } %>
+
+    <section class="rounded-3xl bg-white p-4 shadow-xl sm:p-6">
+      <div class="mb-5 flex items-center justify-between">
+        <h2 class="text-xl font-black text-[#063d2d]">Uploaded Documents</h2>
+        <span class="text-sm text-gray-500"><%= documents.length %> documents</span>
+      </div>
+
+      <% if (!documents.length) { %>
+        <div class="rounded-2xl border border-dashed p-8 text-center text-gray-600">
+          No documents uploaded yet. Start with the first PDF.
+        </div>
+      <% } else { %>
+        <div class="overflow-x-auto rounded-2xl border">
+          <table class="min-w-[680px] w-full text-left text-sm">
+            <thead class="bg-[#063d2d] text-white">
+              <tr>
+                <th class="p-3">Title</th>
+                <th class="p-3">Category</th>
+                <th class="p-3">Uploaded</th>
+                <th class="p-3">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% documents.forEach(doc => { %>
+                <tr class="border-t align-top">
+                  <td class="p-3">
+                    <div class="font-bold"><%= doc.title %></div>
+                    <% if (doc.description) { %><div class="mt-1 line-clamp-2 text-xs text-gray-500"><%= doc.description %></div><% } %>
+                  </td>
+                  <td class="p-3"><span class="rounded-full bg-[#ead8b5] px-3 py-1 text-xs font-bold"><%= categoryLabel(doc.category) %></span></td>
+                  <td class="p-3 text-gray-500"><%= new Date(doc.created_at).toLocaleDateString('bg-BG') %></td>
+                  <td class="p-3">
+                    <div class="flex flex-wrap gap-2">
+                      <a href="<%= doc.file_path %>" target="_blank" class="rounded-lg border px-3 py-1 font-bold text-[#0f6043]">Open</a>
+                      <a href="/admin/documents/<%= doc.id %>/edit" class="rounded-lg border px-3 py-1 font-bold text-[#063d2d]">Edit</a>
+                      <form action="/admin/documents/<%= doc.id %>/delete" method="POST" onsubmit="return confirm('Delete this document?')">
+                        <button class="rounded-lg border border-red-300 px-3 py-1 font-bold text-red-700">Delete</button>
+                      </form>
+                    </div>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      <% } %>
+    </section>
+  </main>
+</body>
+</html>

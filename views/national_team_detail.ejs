@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= entry.title %> | Национален отбор | БФСА</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>body{font-family:Montserrat,sans-serif}.display{font-family:'Cormorant Garamond',serif}</style>
+</head>
+<body class="min-h-screen bg-[#fbf8f1] text-[#26201c]">
+  <header class="border-b border-[#ead8b5] bg-white/90 px-6 py-4 shadow-sm">
+    <div class="mx-auto flex max-w-7xl items-center justify-between gap-4">
+      <a href="/" class="font-black uppercase tracking-wide text-[#063d2d]">БФСА</a>
+      <a href="/national-team" class="text-sm font-bold text-[#0f6043] hover:underline">← Национален отбор</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="bg-[#063d2d] px-6 py-14 text-white">
+      <div class="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1.1fr_.9fr] lg:items-center">
+        <div>
+          <p class="text-xs font-black uppercase tracking-[.22em] text-[#bd8e3b]"><%= ageGroupLabel(entry.age_group) %> · <%= ntCategoryLabel(entry.category) %></p>
+          <h1 class="display mt-3 text-5xl font-bold uppercase tracking-wide md:text-6xl"><%= entry.title %></h1>
+          <p class="mt-5 text-xl font-bold text-white/90"><%= [entry.athlete1, entry.athlete2, entry.athlete3, entry.athlete4].filter(Boolean).join(' · ') %></p>
+        </div>
+        <% if (entry.photo_path) { %>
+          <img src="<%= entry.photo_path %>" class="h-80 w-full rounded-3xl object-cover shadow-2xl ring-1 ring-[#bd8e3b]/40">
+        <% } %>
+      </div>
+    </section>
+
+    <section class="mx-auto grid max-w-7xl gap-8 px-6 py-12 lg:grid-cols-[1fr_360px]">
+      <article class="rounded-3xl bg-white p-8 shadow-xl ring-1 ring-[#ead8b5]">
+        <h2 class="text-xl font-black text-[#063d2d] sm:text-2xl">Информация</h2>
+        <% if (entry.description) { %>
+          <div class="mt-5 whitespace-pre-line leading-7 text-[#6e655e]"><%= entry.description %></div>
+        <% } else { %>
+          <p class="mt-5 text-[#6e655e]">Няма добавено описание.</p>
+        <% } %>
+
+        <% if (entry.achievements) { %>
+          <h2 class="mt-10 text-2xl font-black text-[#063d2d]">Постижения</h2>
+          <div class="mt-5 whitespace-pre-line rounded-2xl bg-[#fbf8f1] p-5 leading-7 text-[#6e655e]"><%= entry.achievements %></div>
+        <% } %>
+      </article>
+
+      <aside class="space-y-5">
+        <div class="rounded-3xl bg-white p-6 shadow-xl ring-1 ring-[#ead8b5]">
+          <h3 class="text-xl font-black text-[#063d2d]">Състав</h3>
+          <ul class="mt-4 space-y-2 text-sm font-bold">
+            <% [entry.athlete1, entry.athlete2, entry.athlete3, entry.athlete4].filter(Boolean).forEach(a => { %>
+              <li class="rounded-xl bg-[#fbf8f1] p-3"><%= a %></li>
+            <% }) %>
+          </ul>
+        </div>
+
+        <div class="rounded-3xl bg-white p-6 shadow-xl ring-1 ring-[#ead8b5]">
+          <h3 class="text-xl font-black text-[#063d2d]">Детайли</h3>
+          <div class="mt-4 space-y-3 text-sm">
+            <p><b>Възраст:</b> <%= ageGroupLabel(entry.age_group) %></p>
+            <p><b>Категория:</b> <%= ntCategoryLabel(entry.category) %></p>
+            <% if (entry.club) { %><p><b>Клуб:</b> <%= entry.club %></p><% } %>
+            <% if (entry.coach) { %><p><b>Треньор:</b> <%= entry.coach %></p><% } %>
+          </div>
+          <% if (entry.instagram) { %>
+            <a href="<%= entry.instagram %>" target="_blank" class="mt-5 inline-block rounded-xl bg-[#0f6043] px-5 py-3 text-sm font-bold text-white">Социален профил</a>
+          <% } %>
+        </div>
+      </aside>
+    </section>
+  </main>
+</body>
+</html>

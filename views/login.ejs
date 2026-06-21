@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вход | БФСА</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-[#fbf8f1] flex items-center justify-center px-4">
+  <main class="w-full max-w-md rounded-3xl bg-white p-8 shadow-2xl border border-[#ead8b5]">
+    <h1 class="text-2xl font-black text-[#063d2d] sm:text-3xl">Вход в БФСА</h1>
+    <p class="mt-2 text-sm text-gray-600">Влез в своя профил или създай нов.</p>
+
+    <% if (error) { %>
+      <div class="mt-5 rounded-xl bg-red-50 p-3 text-sm text-red-700"><%= error %></div>
+    <% } %>
+
+    <form action="/login" method="POST" class="mt-6 space-y-4">
+      <label class="block text-sm font-bold text-gray-700">Email
+        <input name="email" type="email" required class="mt-1 w-full rounded-xl border p-3 outline-none focus:ring-2 focus:ring-[#bd8e3b]">
+      </label>
+      <label class="block text-sm font-bold text-gray-700">Парола
+        <input name="password" type="password" required class="mt-1 w-full rounded-xl border p-3 outline-none focus:ring-2 focus:ring-[#bd8e3b]">
+      </label>
+      <button class="w-full rounded-xl bg-[#0f6043] px-4 py-3 font-bold text-white hover:bg-[#063d2d]">Вход</button>
+    </form>
+
+    <div class="mt-5 text-center">
+      <a href="/register" class="font-bold text-[#0f6043] hover:underline">Нямаш профил? Създай профил</a>
+    </div>
+
+    <a href="/" class="mt-5 inline-block text-sm text-[#0f6043] hover:underline">← Назад към сайта</a>
+  </main>
+</body>
+</html>

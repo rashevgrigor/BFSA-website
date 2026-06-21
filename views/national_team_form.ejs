@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= entry ? 'Edit' : 'Add' %> National Team Entry | БФСА</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-[#fbf8f1] text-[#26201c]">
+  <header class="border-b bg-white/90 px-4 py-4 shadow-sm sm:px-6">
+    <div class="mx-auto flex max-w-4xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <h1 class="text-xl font-black text-[#063d2d] sm:text-2xl"><%= entry ? 'Edit National Team Entry' : 'Add National Team Entry' %></h1>
+        <p class="text-sm text-gray-600">Create pair/group banners for the public national team page.</p>
+      </div>
+      <a href="/admin/national-team" class="rounded-xl border px-4 py-2 font-bold text-[#063d2d]">Back</a>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-4xl px-4 py-6 sm:px-6 sm:py-8">
+    <% if (error) { %><div class="mb-5 rounded-xl bg-red-50 p-4 text-sm text-red-700"><%= error %></div><% } %>
+    <form action="<%= entry ? '/admin/national-team/' + entry.id + '/edit' : '/admin/national-team' %>" method="POST" enctype="multipart/form-data" class="grid gap-5 rounded-3xl bg-white p-4 shadow-xl sm:p-6">
+      <label class="block text-sm font-bold">Entry title
+        <input name="title" value="<%= entry ? entry.title : '' %>" placeholder="Example: Juniors Women's Pair" required class="mt-1 w-full rounded-xl border p-3">
+      </label>
+
+      <div class="grid gap-5 md:grid-cols-2">
+        <label class="block text-sm font-bold">Age group
+          <select name="age_group" required class="mt-1 w-full rounded-xl border p-3">
+            <% ageGroups.forEach(group => { %>
+              <option value="<%= group.value %>" <%= entry && entry.age_group === group.value ? 'selected' : '' %>><%= group.label %></option>
+            <% }) %>
+          </select>
+        </label>
+        <label class="block text-sm font-bold">Category
+          <select name="category" required class="mt-1 w-full rounded-xl border p-3">
+            <% categories.forEach(cat => { %>
+              <option value="<%= cat.value %>" <%= entry && entry.category === cat.value ? 'selected' : '' %>><%= cat.label %></option>
+            <% }) %>
+          </select>
+        </label>
+      </div>
+
+      <label class="block text-sm font-bold">Banner / team photo
+        <input name="photo" type="file" accept="image/*" class="mt-1 w-full rounded-xl border p-3">
+      </label>
+      <% if (entry && entry.photo_path) { %>
+        <img src="<%= entry.photo_path %>" class="h-48 w-full rounded-2xl object-cover">
+      <% } %>
+
+      <div class="grid gap-5 md:grid-cols-2">
+        <input name="athlete1" value="<%= entry ? entry.athlete1 : '' %>" placeholder="Athlete 1" required class="rounded-xl border p-3">
+        <input name="athlete2" value="<%= entry ? entry.athlete2 : '' %>" placeholder="Athlete 2" class="rounded-xl border p-3">
+        <input name="athlete3" value="<%= entry ? entry.athlete3 : '' %>" placeholder="Athlete 3 optional" class="rounded-xl border p-3">
+        <input name="athlete4" value="<%= entry ? entry.athlete4 : '' %>" placeholder="Athlete 4 optional" class="rounded-xl border p-3">
+      </div>
+
+      <div class="grid gap-5 md:grid-cols-2">
+        <input name="club" value="<%= entry ? entry.club : '' %>" placeholder="Club" class="rounded-xl border p-3">
+        <input name="coach" value="<%= entry ? entry.coach : '' %>" placeholder="Coach" class="rounded-xl border p-3">
+      </div>
+
+      <input name="instagram" value="<%= entry ? entry.instagram : '' %>" placeholder="Instagram / social link" class="rounded-xl border p-3">
+      <input name="sort_order" type="number" value="<%= entry ? entry.sort_order : 0 %>" placeholder="Sort order" class="rounded-xl border p-3">
+
+      <label class="block text-sm font-bold">Achievements
+        <textarea name="achievements" rows="4" placeholder="One achievement per line" class="mt-1 w-full rounded-xl border p-3"><%= entry ? entry.achievements : '' %></textarea>
+      </label>
+
+      <label class="block text-sm font-bold">Description
+        <textarea name="description" rows="6" class="mt-1 w-full rounded-xl border p-3"><%= entry ? entry.description : '' %></textarea>
+      </label>
+
+      <button class="rounded-xl bg-[#0f6043] px-5 py-3 font-bold text-white"><%= entry ? 'Save Changes' : 'Create Entry' %></button>
+    </form>
+  </main>
+</body>
+</html>

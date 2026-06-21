@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Клубове членове | БФСА</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body class="min-h-screen bg-[#fbf8f1] text-[#26201c]">
+  <header class="bg-[#063d2d] px-6 py-10 text-white">
+    <div class="mx-auto max-w-7xl">
+      <a href="/" class="inline-flex items-center rounded-xl border border-[#bd8e3b]/40 px-4 py-2 text-sm font-black text-[#ead8b5] transition hover:bg-white/10">
+        <span class="sm:hidden">← Начало</span>
+        <span class="hidden sm:inline">← Обратно към началната страница</span>
+      </a>
+      <h1 class="mt-5 text-4xl font-black uppercase md:text-4xl sm:text-5xl">Клубове членове</h1>
+      <p class="mt-3 max-w-2xl text-white/75">Всички клубове, членуващи в Българската федерация по спортна акробатика.</p>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-7xl px-6 py-10">
+    <div class="mb-8 flex flex-wrap gap-3" id="cityFilters">
+      <button data-city="all" class="city-filter rounded-full bg-[#0f6043] px-5 py-2 text-sm font-black text-white">Всички</button>
+      <% cities.forEach(city => { %>
+        <button data-city="<%= city %>" class="city-filter rounded-full border border-[#bd8e3b]/50 bg-white px-5 py-2 text-sm font-black text-[#063d2d] hover:bg-[#ead8b5]/40"><%= city %></button>
+      <% }) %>
+    </div>
+
+    <% if (!clubs.length) { %>
+      <div class="rounded-3xl bg-white p-10 text-center shadow-xl">
+        <h2 class="text-xl font-black text-[#063d2d] sm:text-2xl">Все още няма добавени клубове</h2>
+        <p class="mt-2 text-gray-600">Добави клубове от админ панела.</p>
+      </div>
+    <% } %>
+
+    <div class="grid gap-4 sm:p-6" id="clubsGrid">
+      <% clubs.forEach(club => { %>
+        <article data-city="<%= club.city %>" class="club-card overflow-hidden rounded-3xl bg-white shadow-xl ring-1 ring-[#ead8b5]">
+          <button class="club-toggle flex w-full items-center gap-5 p-4 sm:p-6 text-left transition hover:bg-[#fffdf8]">
+            <% if (club.logo_path) { %>
+              <img src="<%= club.logo_path %>" class="h-20 w-20 rounded-2xl object-cover ring-1 ring-[#ead8b5]">
+            <% } else { %>
+              <div class="grid h-20 w-20 place-items-center rounded-2xl bg-[#ead8b5] text-xl font-black text-[#063d2d]">БФСА</div>
+            <% } %>
+            <div class="min-w-0 flex-1">
+              <h2 class="text-xl font-black text-[#063d2d] sm:text-2xl"><%= club.name %></h2>
+              <p class="mt-1 text-sm font-bold text-[#bd8e3b]"><i class="fa-solid fa-location-dot"></i> <%= club.city %><% if (club.coach) { %> · <%= club.coach %><% } %></p>
+              <p class="mt-2 text-sm text-gray-600"><%= club.short_description || 'Натисни за повече информация за клуба.' %></p>
+            </div>
+            <i class="fa-solid fa-chevron-down text-[#bd8e3b]"></i>
+          </button>
+
+          <div class="club-content hidden border-t border-[#ead8b5] bg-[#fffdf8] p-4 sm:p-6">
+            <div class="grid gap-4 sm:p-6 lg:grid-cols-[1fr_320px]">
+              <div>
+                <h3 class="font-black text-[#063d2d]">Описание</h3>
+                <p class="mt-2 whitespace-pre-line text-gray-700"><%= club.description || club.short_description || 'Няма добавено описание.' %></p>
+                <a href="/clubs/<%= club.slug %>" class="mt-5 inline-block rounded-xl bg-[#0f6043] px-5 py-3 font-black text-white">Отвори пълна страница</a>
+              </div>
+              <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-[#ead8b5]">
+                <h3 class="font-black text-[#063d2d]">Контакти</h3>
+                <div class="mt-3 space-y-2 text-sm">
+                  <% if (club.address) { %><p><b>Адрес:</b> <%= club.address %></p><% } %>
+                  <% if (club.coach) { %><p><b>Треньор:</b> <%= club.coach %></p><% } %>
+                  <% if (club.phone) { %><p><b>Телефон:</b> <%= club.phone %></p><% } %>
+                  <% if (club.email) { %><p><b>Email:</b> <a class="text-[#0f6043] hover:underline" href="mailto:<%= club.email %>"><%= club.email %></a></p><% } %>
+                  <% if (club.website) { %><p><a class="font-bold text-[#0f6043] hover:underline" href="<%= club.website %>" target="_blank">Website</a></p><% } %>
+                  <% if (club.instagram) { %><p><a class="font-bold text-[#0f6043] hover:underline" href="<%= club.instagram %>" target="_blank">Instagram</a></p><% } %>
+                  <% if (club.facebook) { %><p><a class="font-bold text-[#0f6043] hover:underline" href="<%= club.facebook %>" target="_blank">Facebook</a></p><% } %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+      <% }) %>
+    </div>
+  </main>
+
+  <script>
+    document.querySelectorAll('.club-toggle').forEach(button => {
+      button.addEventListener('click', () => {
+        const content = button.parentElement.querySelector('.club-content');
+        content.classList.toggle('hidden');
+      });
+    });
+
+    document.querySelectorAll('.city-filter').forEach(button => {
+      button.addEventListener('click', () => {
+        const city = button.dataset.city;
+        document.querySelectorAll('.city-filter').forEach(b => {
+          b.classList.remove('bg-[#0f6043]', 'text-white');
+          b.classList.add('bg-white', 'text-[#063d2d]');
+        });
+        button.classList.add('bg-[#0f6043]', 'text-white');
+        button.classList.remove('bg-white', 'text-[#063d2d]');
+        document.querySelectorAll('.club-card').forEach(card => {
+          card.style.display = city === 'all' || card.dataset.city === city ? '' : 'none';
+        });
+      });
+    });
+  </script>
+</body>
+</html>
